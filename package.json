@@ -1,0 +1,33 @@
+{
+  "name": "brightvoid",
+  "version": "0.0.1",
+  "description": "Revolutionary Apparel",
+  "main": "pages/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "node server.js",
+    "dev:next": "next",
+    "build": "next build",
+    "start": "next start"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/JayWelsh/brightvoid.git"
+  },
+  "author": "Jay Welsh",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/JayWelsh/brightvoid/issues"
+  },
+  "homepage": "https://github.com/JayWelsh/brightvoid#readme",
+  "dependencies": {
+    "@material-ui/core": "^3.5.1",
+    "@material-ui/icons": "^3.0.1",
+    "@zeit/next-sass": "^1.0.1",
+    "express": "^4.16.4",
+    "next": "^7.0.2",
+    "node-sass": "^4.10.0",
+    "react": "^16.6.3",
+    "react-dom": "^16.6.3"
+  }
+}
