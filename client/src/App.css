@@ -1,0 +1,161 @@
+@import url('https://fonts.googleapis.com/css?family=Rock+Salt');
+
+.header-logo img {
+  height: 100%;
+}
+
+.full-width {
+  width: 100%;
+}
+
+.hide-overflow-container {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+.fill-img {
+  min-width: 100%;
+  min-height: 100%;
+  position: relative;
+  top: 50%;
+  left: 50%;
+  transform: translateY(-50%)translateX(-50%);
+}
+
+.disable-webkit-tap-highlight {
+  -webkit-tap-highlight-color: transparent!important;
+}
+
+.our-gradient {
+  background: #000000;
+  background: -webkit-linear-gradient(-90deg, #000000, #2a2a2a);
+  background: -o-linear-gradient(-90deg, #000000, #2a2a2a);
+  background: -moz-linear-gradient(-90deg, #000000, #2a2a2a);
+  background: linear-gradient(-90deg, #000000, #2a2a2a);
+}
+
+.no-decoration {
+  text-decoration: none
+}
+
+.disable-padding {
+  padding: 0px!important;
+}
+
+.absolute-center {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translateY(-50%)translateX(-50%);
+}
+
+.hover-to-front {
+  z-index: 9000;
+}
+
+.heavy-text-shadow {
+  text-shadow: 1px 1px 1px #000, 2px 2px 5px black;
+}
+
+.shadow-filter {
+  -webkit-filter: drop-shadow(2px 2px 5px #000000);
+  filter: drop-shadow(2px 2px 5px #000000);
+}
+
+.rock-salt {
+  font-family: 'Rock Salt', cursive!important;
+}
+
+.carousel-custom:hover {
+  cursor: grab;
+}
+
+.carousel-custom:active {
+  cursor: grabbing;
+}
+
+.carousel-custom > div {
+  overflow: hidden;
+}
+
+.Tilt {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transform-style: preserve-3d;
+}
+
+.Tilt-inner {
+transform: translateZ(-100px);
+font-size: 100px;
+}
+
+.display-contents {
+  display: contents;
+}
+
+.flex-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.flex-wrap {
+  flex-wrap: wrap;
+}
+
+.disable-mouse-events {
+  pointer-events: none;
+  -webkit-touch-callout: none; /* iOS Safari */
+  -webkit-user-select: none; /* Safari */
+  -khtml-user-select: none; /* Konqueror HTML */
+  -moz-user-select: none; /* Firefox */
+  -ms-user-select: none; /* Internet Explorer/Edge */
+  user-select: none; /* Non-prefixed version, currently
+                                  supported by Chrome and Opera */
+}
+
+.float-effect {
+  animation: float 20s ease-in-out infinite;
+}
+
+@keyframes float {
+	0% {
+		transform: translateY(-5px)translateX(-5px)translateZ(500px)scale3d(1.02,1.02,1.02)rotateY(5deg)rotateX(5deg)rotateZ(3deg);
+	}
+	25% {
+		transform: translateY(5px)translateX(5px)scale3d(1,1,1)rotateY(-5deg)rotateX(-13deg)rotateZ(-3deg);
+  }
+  50% {
+		transform: translateY(-5px)translateX(-5px)scale3d(1.02,1.02,1.02)rotateY(5deg)rotateZ(3deg);
+  }
+  75% {
+		transform: translateY(5px)translateX(5px)scale3d(1,1,1)rotateY(-5deg)rotateX(13deg)rotateZ(-3deg);
+	}
+	100% {
+		transform: translateY(-5px)translateX(-5px)scale3d(1.02,1.02,1.02)rotateY(5deg)rotateX(5deg)rotateZ(3deg);
+	}
+}
+
+@media (min-width: 0px) {
+  .header-logo {
+    height: 35px;
+  };
+  .carousel-custom {
+    border-radius: 0px;
+  }
+}
+
+@media (min-width: 600px) {
+  .header-logo {
+    height: 45px;
+  };
+  .carousel-custom {
+    border-radius: 4px;
+  }
+  .simple-media-card-img {
+    height: 150px;
+    padding-top: 56.25%;
+  };
+}
