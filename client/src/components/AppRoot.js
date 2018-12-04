@@ -18,13 +18,22 @@ import InboxIcon from '@material-ui/icons/MoveToInbox';
 import MailIcon from '@material-ui/icons/Mail';
 import BrightvoidLogo from '../img/BrightvoidLogoFlat.png';
 import {configureHistory, isPrefixWWW} from '../utils';
+import ApolloClient from 'apollo-boost';
+import { ApolloProvider } from "react-apollo";
 import PageContainer from './PageContainer';
 
 let endpointGraphQL = "https://brightvoid.com/graphql";
 if(isPrefixWWW()){
   endpointGraphQL = "https://www.brightvoid.com/graphql";
 };
-console.log("endpointGraphQL",endpointGraphQL);
+
+if (process.env.NODE_ENV !== 'production' || process.env.REACT_APP_FORCE_LOCALHOST) {
+  endpointGraphQL = "http://localhost:1337/graphql"
+}
+
+const client = new ApolloClient({
+  uri: endpointGraphQL
+});
 
 const sizeConsiderMobile = 600;
 
@@ -116,36 +125,38 @@ class AppRoot extends React.Component {
       );
   return (
     <Router history={history}>
-      <MuiThemeProvider theme={theme}>
-        <div className={classes.root}>
-            <Drawer open={this.state.left} onClose={this.toggleDrawer('left', false)}>
-              <div
-                tabIndex={0}
-                role="button"
-                onClick={this.toggleDrawer('left', false)}
-                onKeyDown={this.toggleDrawer('left', false)}
-              >
-                {sideList}
-              </div>
-            </Drawer>
-            <AppBar className={"our-gradient"} position="static">
-                <Toolbar>
-                <IconButton onClick={this.toggleDrawer('left', true)} className={classes.menuButton} color="inherit" aria-label="Menu">
-                    <MenuIcon />
-                </IconButton>
-                <div className={"header-logo full-width"}>
-                  <Link to={'/'} className={"no-decoration"}>
-                    <img alt="Brightvoid Logo" src={BrightvoidLogo} />
-                  </Link>
+      <ApolloProvider client={client}>
+        <MuiThemeProvider theme={theme}>
+          <div className={classes.root}>
+              <Drawer open={this.state.left} onClose={this.toggleDrawer('left', false)}>
+                <div
+                  tabIndex={0}
+                  role="button"
+                  onClick={this.toggleDrawer('left', false)}
+                  onKeyDown={this.toggleDrawer('left', false)}
+                >
+                  {sideList}
                 </div>
-                <Button color="inherit">Login</Button>
-                </Toolbar>
-            </AppBar>
-            <main className={classes.content}>
-              <PageContainer isConsideredMobile={isConsideredMobile} />
-            </main>
-        </div>
-      </MuiThemeProvider>
+              </Drawer>
+              <AppBar className={"our-gradient"} position="static">
+                  <Toolbar>
+                  <IconButton onClick={this.toggleDrawer('left', true)} className={classes.menuButton} color="inherit" aria-label="Menu">
+                      <MenuIcon />
+                  </IconButton>
+                  <div className={"header-logo full-width"}>
+                    <Link to={'/'} className={"no-decoration"}>
+                      <img alt="Brightvoid Logo" src={BrightvoidLogo} />
+                    </Link>
+                  </div>
+                  <Button color="inherit">Login</Button>
+                  </Toolbar>
+              </AppBar>
+              <main className={classes.content}>
+                <PageContainer isConsideredMobile={isConsideredMobile} />
+              </main>
+          </div>
+        </MuiThemeProvider>
+      </ApolloProvider>
     </Router>
   );
 }

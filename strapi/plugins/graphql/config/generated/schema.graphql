@@ -1,0 +1,609 @@
+"""A slide in a carousel or slideshow"""
+type Carouselslide {
+  _id: ID!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  title: String
+  link: String
+  foregroundimage: UploadFile
+  backgroundimage: UploadFile
+  featured: Boolean
+}
+
+type CarouselslideAggregator {
+  count: Int
+}
+
+type CarouselslideConnection {
+  values: [Carouselslide]
+  groupBy: CarouselslideGroupBy
+  aggregate: CarouselslideAggregator
+}
+
+type CarouselslideConnection_id {
+  key: ID
+  connection: CarouselslideConnection
+}
+
+type CarouselslideConnectionBackgroundimage {
+  key: ID
+  connection: CarouselslideConnection
+}
+
+type CarouselslideConnectionCreatedAt {
+  key: DateTime
+  connection: CarouselslideConnection
+}
+
+type CarouselslideConnectionFeatured {
+  key: Boolean
+  connection: CarouselslideConnection
+}
+
+type CarouselslideConnectionForegroundimage {
+  key: ID
+  connection: CarouselslideConnection
+}
+
+type CarouselslideConnectionLink {
+  key: String
+  connection: CarouselslideConnection
+}
+
+type CarouselslideConnectionTitle {
+  key: String
+  connection: CarouselslideConnection
+}
+
+type CarouselslideConnectionUpdatedAt {
+  key: DateTime
+  connection: CarouselslideConnection
+}
+
+type CarouselslideGroupBy {
+  _id: [CarouselslideConnection_id]
+  createdAt: [CarouselslideConnectionCreatedAt]
+  updatedAt: [CarouselslideConnectionUpdatedAt]
+  title: [CarouselslideConnectionTitle]
+  link: [CarouselslideConnectionLink]
+  foregroundimage: [CarouselslideConnectionForegroundimage]
+  backgroundimage: [CarouselslideConnectionBackgroundimage]
+  featured: [CarouselslideConnectionFeatured]
+}
+
+input CarouselslideInput {
+  title: String
+  link: String
+  foregroundimage: ID
+  backgroundimage: ID
+  featured: Boolean
+}
+
+input createCarouselslideInput {
+  data: CarouselslideInput
+}
+
+type createCarouselslidePayload {
+  carouselslide: Carouselslide
+}
+
+input createProductInput {
+  data: ProductInput
+}
+
+type createProductPayload {
+  product: Product
+}
+
+input createRoleInput {
+  data: RoleInput
+}
+
+type createRolePayload {
+  role: UsersPermissionsRole
+}
+
+input createUserInput {
+  data: UserInput
+}
+
+type createUserPayload {
+  user: UsersPermissionsUser
+}
+
+"""
+The `DateTime` scalar represents a date and time following the ISO 8601 standard
+"""
+scalar DateTime
+
+input deleteCarouselslideInput {
+  where: InputID
+}
+
+type deleteCarouselslidePayload {
+  carouselslide: Carouselslide
+}
+
+input deleteProductInput {
+  where: InputID
+}
+
+type deleteProductPayload {
+  product: Product
+}
+
+input deleteRoleInput {
+  where: InputID
+}
+
+type deleteRolePayload {
+  role: UsersPermissionsRole
+}
+
+input deleteUserInput {
+  where: InputID
+}
+
+type deleteUserPayload {
+  user: UsersPermissionsUser
+}
+
+input FileInput {
+  name: String!
+  hash: String!
+  sha256: String
+  ext: String
+  mime: String!
+  size: String!
+  url: String!
+  provider: String!
+  public_id: String
+  related: [ID]
+}
+
+input InputID {
+  id: ID!
+}
+
+"""
+The `JSON` scalar type represents JSON values as specified by [ECMA-404](http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf).
+"""
+scalar JSON
+
+union Morph = UsersPermissionsMe | UsersPermissionsMeRole | Carouselslide | createCarouselslidePayload | updateCarouselslidePayload | deleteCarouselslidePayload | CarouselslideConnection | CarouselslideAggregator | CarouselslideGroupBy | CarouselslideConnection_id | CarouselslideConnectionCreatedAt | CarouselslideConnectionUpdatedAt | CarouselslideConnectionTitle | CarouselslideConnectionLink | CarouselslideConnectionForegroundimage | CarouselslideConnectionBackgroundimage | CarouselslideConnectionFeatured | Product | createProductPayload | updateProductPayload | deleteProductPayload | ProductConnection | ProductAggregator | ProductAggregatorSum | ProductAggregatorAvg | ProductAggregatorMin | ProductAggregatorMax | ProductGroupBy | ProductConnection_id | ProductConnectionCreatedAt | ProductConnectionUpdatedAt | ProductConnectionName | ProductConnectionSeo | ProductConnectionPrice | ProductConnectionDescription | UploadFile | UploadFileConnection | UploadFileAggregator | UploadFileGroupBy | UploadFileConnection_id | UploadFileConnectionCreatedAt | UploadFileConnectionUpdatedAt | UploadFileConnectionName | UploadFileConnectionHash | UploadFileConnectionSha256 | UploadFileConnectionExt | UploadFileConnectionMime | UploadFileConnectionSize | UploadFileConnectionUrl | UploadFileConnectionProvider | UploadFileConnectionPublic_id | UsersPermissionsPermission | UsersPermissionsRole | createRolePayload | updateRolePayload | deleteRolePayload | UsersPermissionsRoleConnection | UsersPermissionsRoleAggregator | UsersPermissionsRoleGroupBy | UsersPermissionsRoleConnection_id | UsersPermissionsRoleConnectionName | UsersPermissionsRoleConnectionDescription | UsersPermissionsRoleConnectionType | UsersPermissionsUser | createUserPayload | updateUserPayload | deleteUserPayload | UsersPermissionsUserConnection | UsersPermissionsUserAggregator | UsersPermissionsUserGroupBy | UsersPermissionsUserConnection_id | UsersPermissionsUserConnectionUsername | UsersPermissionsUserConnectionEmail | UsersPermissionsUserConnectionProvider | UsersPermissionsUserConnectionConfirmed | UsersPermissionsUserConnectionBlocked | UsersPermissionsUserConnectionRole
+
+type Mutation {
+  createCarouselslide(input: createCarouselslideInput): createCarouselslidePayload
+  updateCarouselslide(input: updateCarouselslideInput): updateCarouselslidePayload
+  deleteCarouselslide(input: deleteCarouselslideInput): deleteCarouselslidePayload
+  createProduct(input: createProductInput): createProductPayload
+  updateProduct(input: updateProductInput): updateProductPayload
+  deleteProduct(input: deleteProductInput): deleteProductPayload
+
+  """Create a new role"""
+  createRole(input: createRoleInput): createRolePayload
+
+  """Update an existing role"""
+  updateRole(input: updateRoleInput): updateRolePayload
+
+  """Delete an existing role"""
+  deleteRole(input: deleteRoleInput): deleteRolePayload
+  createUser(input: createUserInput): createUserPayload
+  updateUser(input: updateUserInput): updateUserPayload
+  deleteUser(input: deleteUserInput): deleteUserPayload
+  upload(refId: ID, ref: String, source: String, file: Upload!): UploadFile!
+}
+
+"""Content type for website products"""
+type Product {
+  _id: ID!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  name: String
+  seo: String
+  price: Float
+  description: String
+  images(sort: String, limit: Int, start: Int, where: JSON): [UploadFile]
+}
+
+type ProductAggregator {
+  count: Int
+  sum: ProductAggregatorSum
+  avg: ProductAggregatorAvg
+  min: ProductAggregatorMin
+  max: ProductAggregatorMax
+}
+
+type ProductAggregatorAvg {
+  price: Float
+}
+
+type ProductAggregatorMax {
+  price: Float
+}
+
+type ProductAggregatorMin {
+  price: Float
+}
+
+type ProductAggregatorSum {
+  price: Float
+}
+
+type ProductConnection {
+  values: [Product]
+  groupBy: ProductGroupBy
+  aggregate: ProductAggregator
+}
+
+type ProductConnection_id {
+  key: ID
+  connection: ProductConnection
+}
+
+type ProductConnectionCreatedAt {
+  key: DateTime
+  connection: ProductConnection
+}
+
+type ProductConnectionDescription {
+  key: String
+  connection: ProductConnection
+}
+
+type ProductConnectionName {
+  key: String
+  connection: ProductConnection
+}
+
+type ProductConnectionPrice {
+  key: Float
+  connection: ProductConnection
+}
+
+type ProductConnectionSeo {
+  key: String
+  connection: ProductConnection
+}
+
+type ProductConnectionUpdatedAt {
+  key: DateTime
+  connection: ProductConnection
+}
+
+type ProductGroupBy {
+  _id: [ProductConnection_id]
+  createdAt: [ProductConnectionCreatedAt]
+  updatedAt: [ProductConnectionUpdatedAt]
+  name: [ProductConnectionName]
+  seo: [ProductConnectionSeo]
+  price: [ProductConnectionPrice]
+  description: [ProductConnectionDescription]
+}
+
+input ProductInput {
+  name: String
+  seo: String
+  price: Float
+  description: String
+  images: [ID]
+}
+
+type Query {
+  carouselslide(id: ID!): Carouselslide
+  carouselslides(sort: String, limit: Int, start: Int, where: JSON): [Carouselslide]
+  carouselslidesConnection(sort: String, limit: Int, start: Int, where: JSON): CarouselslideConnection
+  product(id: ID!): Product
+  products(sort: String, limit: Int, start: Int, where: JSON): [Product]
+  productsConnection(sort: String, limit: Int, start: Int, where: JSON): ProductConnection
+  files(sort: String, limit: Int, start: Int, where: JSON): [UploadFile]
+  filesConnection(sort: String, limit: Int, start: Int, where: JSON): UploadFileConnection
+  role(id: ID!): UsersPermissionsRole
+
+  """
+  Retrieve all the existing roles. You can't apply filters on this query.
+  """
+  roles(sort: String, limit: Int, start: Int, where: JSON): [UsersPermissionsRole]
+  rolesConnection(sort: String, limit: Int, start: Int, where: JSON): UsersPermissionsRoleConnection
+  user(id: ID!): UsersPermissionsUser
+  users(sort: String, limit: Int, start: Int, where: JSON): [UsersPermissionsUser]
+  usersConnection(sort: String, limit: Int, start: Int, where: JSON): UsersPermissionsUserConnection
+  me: UsersPermissionsMe
+}
+
+input RoleInput {
+  name: String!
+  description: String
+  type: String
+  permissions: [ID]
+  users: [ID]
+}
+
+input updateCarouselslideInput {
+  where: InputID
+  data: CarouselslideInput
+}
+
+type updateCarouselslidePayload {
+  carouselslide: Carouselslide
+}
+
+input updateProductInput {
+  where: InputID
+  data: ProductInput
+}
+
+type updateProductPayload {
+  product: Product
+}
+
+input updateRoleInput {
+  where: InputID
+  data: RoleInput
+}
+
+type updateRolePayload {
+  role: UsersPermissionsRole
+}
+
+input updateUserInput {
+  where: InputID
+  data: UserInput
+}
+
+type updateUserPayload {
+  user: UsersPermissionsUser
+}
+
+"""
+The `Upload` scalar type represents a file upload promise that resolves an
+object containing `stream`, `filename`, `mimetype` and `encoding`.
+"""
+scalar Upload
+
+type UploadFile {
+  _id: ID!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  name: String!
+  hash: String!
+  sha256: String
+  ext: String
+  mime: String!
+  size: String!
+  url: String!
+  provider: String!
+  public_id: String
+  related(sort: String, limit: Int, start: Int, where: JSON): [Morph]
+}
+
+type UploadFileAggregator {
+  count: Int
+}
+
+type UploadFileConnection {
+  values: [UploadFile]
+  groupBy: UploadFileGroupBy
+  aggregate: UploadFileAggregator
+}
+
+type UploadFileConnection_id {
+  key: ID
+  connection: UploadFileConnection
+}
+
+type UploadFileConnectionCreatedAt {
+  key: DateTime
+  connection: UploadFileConnection
+}
+
+type UploadFileConnectionExt {
+  key: String
+  connection: UploadFileConnection
+}
+
+type UploadFileConnectionHash {
+  key: String
+  connection: UploadFileConnection
+}
+
+type UploadFileConnectionMime {
+  key: String
+  connection: UploadFileConnection
+}
+
+type UploadFileConnectionName {
+  key: String
+  connection: UploadFileConnection
+}
+
+type UploadFileConnectionProvider {
+  key: String
+  connection: UploadFileConnection
+}
+
+type UploadFileConnectionPublic_id {
+  key: String
+  connection: UploadFileConnection
+}
+
+type UploadFileConnectionSha256 {
+  key: String
+  connection: UploadFileConnection
+}
+
+type UploadFileConnectionSize {
+  key: String
+  connection: UploadFileConnection
+}
+
+type UploadFileConnectionUpdatedAt {
+  key: DateTime
+  connection: UploadFileConnection
+}
+
+type UploadFileConnectionUrl {
+  key: String
+  connection: UploadFileConnection
+}
+
+type UploadFileGroupBy {
+  _id: [UploadFileConnection_id]
+  createdAt: [UploadFileConnectionCreatedAt]
+  updatedAt: [UploadFileConnectionUpdatedAt]
+  name: [UploadFileConnectionName]
+  hash: [UploadFileConnectionHash]
+  sha256: [UploadFileConnectionSha256]
+  ext: [UploadFileConnectionExt]
+  mime: [UploadFileConnectionMime]
+  size: [UploadFileConnectionSize]
+  url: [UploadFileConnectionUrl]
+  provider: [UploadFileConnectionProvider]
+  public_id: [UploadFileConnectionPublic_id]
+}
+
+input UserInput {
+  username: String!
+  email: String!
+  provider: String
+  confirmed: Boolean
+  blocked: Boolean
+  role: ID
+}
+
+type UsersPermissionsMe {
+  _id: ID!
+  username: String!
+  email: String!
+  confirmed: Boolean
+  blocked: Boolean
+  role: UsersPermissionsMeRole
+}
+
+type UsersPermissionsMeRole {
+  _id: ID!
+  name: String!
+  description: String
+  type: String
+}
+
+type UsersPermissionsPermission {
+  _id: ID!
+  type: String!
+  controller: String!
+  action: String!
+  enabled: Boolean!
+  policy: String
+  role: UsersPermissionsRole
+}
+
+type UsersPermissionsRole {
+  _id: ID!
+  name: String!
+  description: String
+  type: String
+  permissions(sort: String, limit: Int, start: Int, where: JSON): [UsersPermissionsPermission]
+  users(sort: String, limit: Int, start: Int, where: JSON): [UsersPermissionsUser]
+}
+
+type UsersPermissionsRoleAggregator {
+  count: Int
+}
+
+type UsersPermissionsRoleConnection {
+  values: [UsersPermissionsRole]
+  groupBy: UsersPermissionsRoleGroupBy
+  aggregate: UsersPermissionsRoleAggregator
+}
+
+type UsersPermissionsRoleConnection_id {
+  key: ID
+  connection: UsersPermissionsRoleConnection
+}
+
+type UsersPermissionsRoleConnectionDescription {
+  key: String
+  connection: UsersPermissionsRoleConnection
+}
+
+type UsersPermissionsRoleConnectionName {
+  key: String
+  connection: UsersPermissionsRoleConnection
+}
+
+type UsersPermissionsRoleConnectionType {
+  key: String
+  connection: UsersPermissionsRoleConnection
+}
+
+type UsersPermissionsRoleGroupBy {
+  _id: [UsersPermissionsRoleConnection_id]
+  name: [UsersPermissionsRoleConnectionName]
+  description: [UsersPermissionsRoleConnectionDescription]
+  type: [UsersPermissionsRoleConnectionType]
+}
+
+type UsersPermissionsUser {
+  _id: ID!
+  username: String!
+  email: String!
+  provider: String
+  confirmed: Boolean
+  blocked: Boolean
+  role: UsersPermissionsRole
+}
+
+type UsersPermissionsUserAggregator {
+  count: Int
+}
+
+type UsersPermissionsUserConnection {
+  values: [UsersPermissionsUser]
+  groupBy: UsersPermissionsUserGroupBy
+  aggregate: UsersPermissionsUserAggregator
+}
+
+type UsersPermissionsUserConnection_id {
+  key: ID
+  connection: UsersPermissionsUserConnection
+}
+
+type UsersPermissionsUserConnectionBlocked {
+  key: Boolean
+  connection: UsersPermissionsUserConnection
+}
+
+type UsersPermissionsUserConnectionConfirmed {
+  key: Boolean
+  connection: UsersPermissionsUserConnection
+}
+
+type UsersPermissionsUserConnectionEmail {
+  key: String
+  connection: UsersPermissionsUserConnection
+}
+
+type UsersPermissionsUserConnectionProvider {
+  key: String
+  connection: UsersPermissionsUserConnection
+}
+
+type UsersPermissionsUserConnectionRole {
+  key: ID
+  connection: UsersPermissionsUserConnection
+}
+
+type UsersPermissionsUserConnectionUsername {
+  key: String
+  connection: UsersPermissionsUserConnection
+}
+
+type UsersPermissionsUserGroupBy {
+  _id: [UsersPermissionsUserConnection_id]
+  username: [UsersPermissionsUserConnectionUsername]
+  email: [UsersPermissionsUserConnectionEmail]
+  provider: [UsersPermissionsUserConnectionProvider]
+  confirmed: [UsersPermissionsUserConnectionConfirmed]
+  blocked: [UsersPermissionsUserConnectionBlocked]
+  role: [UsersPermissionsUserConnectionRole]
+}

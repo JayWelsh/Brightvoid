@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import HomePage from './HomePage';
 import BrowseArtworkPage from './BrowseArtworkPage';
-import ProductPage from './ProductPage';
+import ArtworkPage from './ArtworkPage';
 import {Route, withRouter} from 'react-router-dom';
 
 const styles = theme => ({
@@ -43,7 +43,7 @@ class PageContainer extends React.Component {
     return (
       <div className={classes.pageContainer}>
           <Route exact={true} path="/" render={(props) => HomePageRoute(props, isConsideredMobile)}/>
-          <Route exact={true} path="/artwork/:productName" render={(props) => ArtworkPageRoute(props, isConsideredMobile)}/>
+          <Route exact={true} path="/artwork/:artworkNameSEO" render={(props) => ArtworkPageRoute(props, isConsideredMobile)}/>
           <Route exact={true} path="/artwork" render={(props) => ArtworkPageRoute(props, isConsideredMobile)}/>
       </div>
     );
@@ -57,8 +57,8 @@ const HomePageRoute = (props, isConsideredMobile) => {
 
 const ArtworkPageRoute = ({ match }, isConsideredMobile) => {
     let pagePadding = isConsideredMobile ? mobilePagePadding : desktopPagePadding;
-    if(match.params && match.params.productName){
-        return <ProductPage isConsideredMobile={isConsideredMobile} productName={match.params.productName} pagePadding={pagePadding}/>
+    if(match.params && match.params.artworkNameSEO){
+        return <ArtworkPage isConsideredMobile={isConsideredMobile} artworkNameSEO={match.params.artworkNameSEO} pagePadding={pagePadding}/>
     }else{
         return <BrowseArtworkPage isConsideredMobile={isConsideredMobile} pagePadding={pagePadding}/>
     }

@@ -1,0 +1,35 @@
+{
+  "connection": "default",
+  "collectionName": "product",
+  "info": {
+    "name": "product",
+    "description": "Content type for website products"
+  },
+  "options": {
+    "timestamps": true
+  },
+  "attributes": {
+    "name": {
+      "default": "",
+      "type": "string"
+    },
+    "seo": {
+      "default": "",
+      "type": "string"
+    },
+    "price": {
+      "default": "",
+      "type": "decimal"
+    },
+    "description": {
+      "default": "",
+      "type": "text"
+    },
+    "images": {
+      "collection": "file",
+      "via": "related",
+      "plugin": "upload",
+      "required": false
+    }
+  }
+}

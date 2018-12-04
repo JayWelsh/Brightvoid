@@ -108,7 +108,7 @@ render() {
           image={imgSrc}
           title="Life or dream?"
         />
-        <CardContent style={{backgroundColor: '#070707'}}>
+        <CardContent className='darkCardBackground'>
           <Typography gutterBottom variant="h5" component="h2">
             Coincidentia Oppositorum
           </Typography>
@@ -117,7 +117,7 @@ render() {
           </Typography>
         </CardContent>
         </CardActionArea>
-        <CardActions style={{backgroundColor: '#070707'}}>
+        <CardActions className='darkCardBackground'>
           <Button size="small" color="secondary">
             Share
           </Button>

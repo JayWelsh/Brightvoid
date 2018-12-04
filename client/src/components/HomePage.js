@@ -20,17 +20,19 @@ import whiteShirt from '../img/mockup2.png';
 import mockupGraphic from '../img/mockup-graphic.png';
 import CarouselButtons from './CarouselButtons';
 import { Link } from 'react-router-dom';
+import { Query, withApollo } from "react-apollo";
+import gql from "graphql-tag";
 
 function TabContainer({ children, dir }) {
   return (
-    <Typography component="div" dir={dir} className="mobile-friendly-padding" style={{ justifyContent:'space-between', height:'calc(100%)' }}>
+    <Typography component="div" dir={dir} className="mobile-friendly-padding" style={{ justifyContent: 'space-between', height: 'calc(100%)' }}>
       {children}
     </Typography>
   );
 }
 
-const tiltOptionsCard = { max : 5, scale: 1.015, reverse: true };
-const tiltOptionsCarousel = { max : 10, scale: 1.025, reverse: true };
+const tiltOptionsCard = { max: 3, scale: 1.015, reverse: true };
+const tiltOptionsCarousel = { max: 10, scale: 1.025, reverse: true };
 
 TabContainer.propTypes = {
   children: PropTypes.node.isRequired,
@@ -60,132 +62,80 @@ class HomePage extends React.Component {
 
   render() {
     const { classes, pagePadding, isConsideredMobile } = this.props;
-    let pagePaddingStyle = {paddingTop: 0};
+    let pagePaddingStyle = { paddingTop: 0 };
     let carouselHeight = window.innerHeight * 0.95 - 64;
-    let carouselStyle = {paddingBottom: pagePadding, height: carouselHeight};
+    let carouselStyle = { paddingBottom: pagePadding, height: carouselHeight };
     let carouselTitleSize = 'h1';
-    if(isConsideredMobile || (carouselHeight < 350)){
+    if (isConsideredMobile || (carouselHeight < 350)) {
       carouselTitleSize = 'h4'
-    } else if (carouselHeight < 500){
+    } else if (carouselHeight < 500) {
       carouselTitleSize = 'h3'
-    } else if (carouselHeight < 650){
+    } else if (carouselHeight < 650) {
       carouselTitleSize = 'h2'
     }
+
     return (
       <div className={classes.root} style={pagePaddingStyle}>
-            <Grid container className={classes.root} spacing={24}>
+        <Query
+          query={
+            gql`query {
+              carouselslides(where: {featured:true}){
+                _id,
+                title,
+                link,
+                foregroundimage {
+                  url
+                },
+                backgroundimage {
+                  url
+                }
+              }
+            }
+            `
+          }
+        >
+          {({ loading, error, data }) => {
+            console.log("data",data)
+            if (loading) return <p>Loading...</p>;
+            if (error) return <p>Error :( ${error}</p>;
+              if(data && data.carouselslides){
+                let usedIds = [];
+                data.carouselslides = data.carouselslides.filter((item) => {
+                  if (usedIds.indexOf(item._id) !== -1) {
+                    return false;
+                  } else {
+                    usedIds.push(item._id);
+                    return true;
+                  }
+                });
+              }
+              
+            return ( <Grid container className={classes.root} spacing={24}>
               <Grid item xs={false} sm={false} md={false} lg={false} className={"disable-padding"}>
               </Grid>
               <Grid container>
-              <Grid item xs={12} sm={12} md={12} lg={12}>
-                <div style={carouselStyle}>
-                <Carousel className={"carousel-custom"} widgets={[CarouselButtons]} duration={300}>
-                  <div style={{background: 'transparent', height: '100%', backgroundImage:'url(' + placeHolderImage1 + ')', backgroundSize: 'cover', backgroundPosition: 'center', overflow: 'hidden'}}>
-                    <Tilt className={'Tilt hide-overflow-container'} options={tiltOptionsCarousel} style={{background: 'transparent', height: '100%'}}>
-                        <img className="Tilt-inner shadow-filter disable-mouse-events" style={{maxHeight: '80%', maxWidth:'100%', position: 'absolute', top:'50%', left: '50%', opacity:'0.98', transform: 'translateX(-50%)translateY(-50%)'}} src={mockupGraphic}></img>
-                        <Typography style={{position: 'absolute', textAlign: 'center', top:'60%'}} className="Tilt-inner rock-salt heavy-text-shadow float-effect disable-mouse-events" gutterBottom variant={carouselTitleSize} component="h1">
-                          Coincidentia<br/>Oppositorum
-                        </Typography>
-                    </Tilt>
-                    <Link to={'/artwork/coincidentia-oppositorum'} className={"no-decoration flex-center absolute-center"}>
-                      <Button variant="contained" color="primary" size="large" className={classes.button}>
-                            View Piece
-                      </Button>
-                    </Link>
+                <Grid item xs={12} sm={12} md={12} lg={12}>
+                  <div style={carouselStyle}>
+                    <Carousel className={"carousel-custom"} widgets={[CarouselButtons]} duration={300}>
+                      {
+                        
+                        data.carouselslides.map(slide => (
+                        <div style={{ background: 'transparent', height: '100%', backgroundImage: 'url(' + slide.backgroundimage.url + ')', backgroundSize: 'cover', backgroundPosition: 'center', overflow: 'hidden' }}>
+                          <Tilt className={'Tilt hide-overflow-container'} options={tiltOptionsCarousel} style={{ background: 'transparent', height: '100%' }}>
+                            <img className="Tilt-inner shadow-filter disable-mouse-events" style={{ maxHeight: '80%', maxWidth: '100%', position: 'absolute', top: '50%', left: '50%', opacity: '0.98', transform: 'translateX(-50%)translateY(-50%)' }} src={slide.foregroundimage.url}></img>
+                            <Typography style={{ position: 'absolute', textAlign: 'center', top: '60%' }} className="Tilt-inner rock-salt heavy-text-shadow float-effect disable-mouse-events" gutterBottom variant={carouselTitleSize} component="h1">
+                              {slide.title}
+                          </Typography>
+                          </Tilt>
+                          <Link to={'/artwork/' + slide.link} className={"no-decoration flex-center absolute-center"}>
+                            <Button variant="contained" color="primary" size="large" className={classes.button}>
+                              View Piece
+                        </Button>
+                          </Link>
+                        </div>
+                      ))}
+                    </Carousel>
                   </div>
-                  <div style={{background: 'transparent', height: '100%', backgroundImage:'url(' + placeHolderImage2 + ')', backgroundSize: 'cover', backgroundPosition: 'center', overflow: 'hidden'}}>
-                    <Tilt className={'Tilt hide-overflow-container'} options={tiltOptionsCarousel} style={{background: 'transparent', height: '100%'}}>
-                      <img className="Tilt-inner shadow-filter disable-mouse-events" style={{maxHeight: '80%', maxWidth:'100%', position: 'absolute', top:'50%', left: '50%', opacity:'0.98', transform: 'translateX(-50%)translateY(-50%)'}} src={blackShirt}></img>
-                      <Typography style={{position: 'absolute', textAlign: 'center', top:'60%'}} className="Tilt-inner rock-salt heavy-text-shadow float-effect disable-mouse-events" gutterBottom variant={carouselTitleSize} component="h1">
-                      Mea<br/>Culpa
-                      </Typography>
-                    </Tilt>
-                    <Link to={'/artwork/coincidentia-oppositorum'} className={"no-decoration flex-center absolute-center"}>
-                      <Button variant="contained" color="primary" size="large" className={classes.button}>
-                            View Piece
-                      </Button>
-                    </Link>
-                  </div>
-                  <div style={{background: 'transparent', height: '100%', backgroundImage:'url(' + placeHolderImage3 + ')', backgroundSize: 'cover', backgroundPosition: 'center', overflow: 'hidden'}}>
-                    <Tilt className={'Tilt hide-overflow-container'} options={tiltOptionsCarousel} style={{background: 'transparent', height: '100%'}}>
-                      <img className="Tilt-inner shadow-filter disable-mouse-events" style={{maxHeight: '80%', maxWidth:'100%', position: 'absolute', top:'50%', left: '50%', opacity:'0.98', transform: 'translateX(-50%)translateY(-50%)'}} src={whiteShirt}></img>
-                      <Typography style={{position: 'absolute', textAlign: 'center', top:'60%'}} className="Tilt-inner rock-salt heavy-text-shadow float-effect disable-mouse-events" gutterBottom variant={carouselTitleSize} component="h1">
-                      Bona<br/>Fide
-                      </Typography>
-                    </Tilt>
-                    <Link to={'/artwork/coincidentia-oppositorum'} className={"no-decoration flex-center absolute-center"}>
-                      <Button variant="contained" color="primary" size="large" className={classes.button}>
-                            View Piece
-                      </Button>
-                    </Link>
-                  </div>
-                  <div style={{background: 'transparent', height: '100%', backgroundImage:'url(' + placeHolderImage4 + ')', backgroundSize: 'cover', backgroundPosition: 'center', overflow: 'hidden'}}>
-                    <Tilt className={'Tilt hide-overflow-container'} options={tiltOptionsCarousel} style={{background: 'transparent', height: '100%'}}>
-                      <img className="Tilt-inner shadow-filter disable-mouse-events" style={{maxHeight: '80%', maxWidth:'100%', position: 'absolute', top:'50%', left: '50%', opacity:'0.98', transform: 'translateX(-50%)translateY(-50%)'}} src={blackShirt}></img>
-                      <Typography style={{position: 'absolute', textAlign: 'center', top:'60%'}} className="Tilt-inner rock-salt heavy-text-shadow float-effect disable-mouse-events" gutterBottom variant={carouselTitleSize} component="h1">
-                        Auribus<br/>Teneo<br/>Lupum
-                      </Typography>
-                    </Tilt>
-                    <Link to={'/artwork/coincidentia-oppositorum'} className={"no-decoration flex-center absolute-center"}>
-                      <Button variant="contained" color="primary" size="large" className={classes.button}>
-                            View Piece
-                      </Button>
-                    </Link>
-                  </div>
-                  <div style={{background: 'transparent', height: '100%', backgroundImage:'url(' + placeHolderImage5 + ')', backgroundSize: 'cover', backgroundPosition: 'center', overflow: 'hidden'}}>
-                    <Tilt className={'Tilt hide-overflow-container'} options={tiltOptionsCarousel} style={{background: 'transparent', height: '100%'}}>
-                      <img className="Tilt-inner shadow-filter disable-mouse-events" style={{maxHeight: '80%', maxWidth:'100%', position: 'absolute', top:'50%', left: '50%', opacity:'0.98', transform: 'translateX(-50%)translateY(-50%)'}} src={blackShirt}></img>
-                      <Typography style={{position: 'absolute', textAlign: 'center', top:'60%'}} className="Tilt-inner rock-salt heavy-text-shadow float-effect disable-mouse-events" gutterBottom variant={carouselTitleSize} component="h1">
-                        Ecrasez<br/>L'infame
-                      </Typography>
-                    </Tilt>
-                    <Link to={'/artwork/coincidentia-oppositorum'} className={"no-decoration flex-center absolute-center"}>
-                      <Button variant="contained" color="primary" size="large" className={classes.button}>
-                            View Piece
-                      </Button>
-                    </Link>
-                  </div>
-                  <div style={{background: 'transparent', height: '100%', backgroundImage:'url(' + placeHolderImage6 + ')', backgroundSize: 'cover', backgroundPosition: 'center', overflow: 'hidden'}}>
-                    <Tilt className={'Tilt hide-overflow-container'} options={tiltOptionsCarousel} style={{background: 'transparent', height: '100%'}}>
-                      <img className="Tilt-inner shadow-filter disable-mouse-events" style={{maxHeight: '80%', maxWidth:'100%', position: 'absolute', top:'50%', left: '50%', opacity:'0.98', transform: 'translateX(-50%)translateY(-50%)'}} src={blackShirt}></img>
-                      <Typography style={{position: 'absolute', textAlign: 'center', top:'60%'}} className="Tilt-inner rock-salt heavy-text-shadow float-effect disable-mouse-events" gutterBottom variant={carouselTitleSize} component="h1">
-                        Carpe<br/>Noctem
-                      </Typography>
-                    </Tilt>
-                    <Link to={'/artwork/coincidentia-oppositorum'} className={"no-decoration flex-center absolute-center"}>
-                      <Button variant="contained" color="primary" size="large" className={classes.button}>
-                            View Piece
-                      </Button>
-                    </Link>
-                  </div>
-                  <div style={{background: 'transparent', height: '100%', backgroundImage:'url(' + placeHolderImage7 + ')', backgroundSize: 'cover', backgroundPosition: 'center', overflow: 'hidden'}}>
-                    <Tilt className={'Tilt hide-overflow-container'} options={tiltOptionsCarousel} style={{background: 'transparent', height: '100%'}}>
-                      <img className="Tilt-inner shadow-filter disable-mouse-events" style={{maxHeight: '80%', maxWidth:'100%', position: 'absolute', top:'50%', left: '50%', opacity:'0.98', transform: 'translateX(-50%)translateY(-50%)'}} src={blackShirt}></img>
-                      <Typography style={{position: 'absolute', textAlign: 'center', top:'60%'}} className="Tilt-inner rock-salt heavy-text-shadow float-effect disable-mouse-events" gutterBottom variant={carouselTitleSize} component="h1">
-                        Cui<br/>Bono
-                      </Typography>
-                    </Tilt>
-                    <Link to={'/artwork/coincidentia-oppositorum'} className={"no-decoration flex-center absolute-center"}>
-                      <Button variant="contained" color="primary" size="large" className={classes.button}>
-                            View Piece
-                      </Button>
-                    </Link>
-                  </div>
-                  <div style={{background: 'transparent', height: '100%', backgroundImage:'url(' + placeHolderImage8 + ')', backgroundSize: 'cover', backgroundPosition: 'center', overflow: 'hidden'}}>
-                    <Tilt className={'Tilt hide-overflow-container'} options={tiltOptionsCarousel} style={{background: 'transparent', height: '100%'}}>
-                      <img className="Tilt-inner shadow-filter" style={{maxHeight: '80%', maxWidth:'100%', position: 'absolute', top:'50%', left: '50%', opacity:'0.98', transform: 'translateX(-50%)translateY(-50%)'}} src={blackShirt}></img>
-                      <Typography style={{position: 'absolute', textAlign: 'center', top:'60%'}} className="Tilt-inner rock-salt heavy-text-shadow float-effect disable-mouse-events" gutterBottom variant={carouselTitleSize} component="h1">
-                        Vox<br/>Nihili
-                      </Typography>
-                    </Tilt>
-                    <Link to={'/artwork/coincidentia-oppositorum'} className={"no-decoration flex-center absolute-center"}>
-                      <Button variant="contained" color="primary" size="large" className={classes.button}>
-                            View Piece
-                      </Button>
-                    </Link>
-                  </div>
-                </Carousel>
-                </div>
                 </Grid>
               </Grid>
               <Grid item xs={false} sm={false} md={false} lg={false} className={"disable-padding"}>
@@ -193,50 +143,30 @@ class HomePage extends React.Component {
               <Grid item xs={false} sm={false} md={1} lg={1} className={"disable-padding"}>
               </Grid>
               <Grid container>
-                <div className={"flex-center flex-wrap"} style={{width: 'calc(100%)'}}>
-                  <div style={{display: 'inline-block'}}>
-                      <SimpleMediaCard tiltOptions={tiltOptionsCard} isConsideredMobile={isConsideredMobile}/>
+                <div className={"flex-center flex-wrap"} style={{ width: 'calc(100%)' }}>
+                <div style={{ display: 'inline-block' }}>
+                    <SimpleMediaCard tiltOptions={tiltOptionsCard} isConsideredMobile={isConsideredMobile} />
                   </div>
-                  <div style={{display: 'inline-block'}}>
-                      <SimpleMediaCard tiltOptions={tiltOptionsCard} isConsideredMobile={isConsideredMobile}/>
+                  <div style={{ display: 'inline-block' }}>
+                    <SimpleMediaCard tiltOptions={tiltOptionsCard} isConsideredMobile={isConsideredMobile} />
                   </div>
-                  <div style={{display: 'inline-block'}}>
-                      <SimpleMediaCard tiltOptions={tiltOptionsCard} isConsideredMobile={isConsideredMobile}/>
+                  <div style={{ display: 'inline-block' }}>
+                    <SimpleMediaCard tiltOptions={tiltOptionsCard} isConsideredMobile={isConsideredMobile} />
                   </div>
-                  <div style={{display: 'inline-block'}}>
-                      <SimpleMediaCard tiltOptions={tiltOptionsCard} isConsideredMobile={isConsideredMobile}/>
-                  </div>
-                  <div style={{display: 'inline-block'}}>
-                      <SimpleMediaCard tiltOptions={tiltOptionsCard} isConsideredMobile={isConsideredMobile}/>
-                  </div>
-                  <div style={{display: 'inline-block'}}>
-                      <SimpleMediaCard tiltOptions={tiltOptionsCard} isConsideredMobile={isConsideredMobile}/>
-                  </div>
-                  <div style={{display: 'inline-block'}}>
-                      <SimpleMediaCard tiltOptions={tiltOptionsCard} isConsideredMobile={isConsideredMobile}/>
-                  </div>
-                  <div style={{display: 'inline-block'}}>
-                      <SimpleMediaCard tiltOptions={tiltOptionsCard} isConsideredMobile={isConsideredMobile}/>
-                  </div>
-                  <div style={{display: 'inline-block'}}>
-                      <SimpleMediaCard tiltOptions={tiltOptionsCard} isConsideredMobile={isConsideredMobile}/>
-                  </div>
-                  <div style={{display: 'inline-block'}}>
-                      <SimpleMediaCard tiltOptions={tiltOptionsCard} isConsideredMobile={isConsideredMobile}/>
-                  </div>
-                  <div style={{display: 'inline-block'}}>
-                      <SimpleMediaCard tiltOptions={tiltOptionsCard} isConsideredMobile={isConsideredMobile}/>
-                  </div>
-                  <div style={{display: 'inline-block'}}>
-                      <SimpleMediaCard tiltOptions={tiltOptionsCard} isConsideredMobile={isConsideredMobile}/>
+                  <div style={{ display: 'inline-block' }}>
+                    <SimpleMediaCard tiltOptions={tiltOptionsCard} isConsideredMobile={isConsideredMobile} />
                   </div>
                 </div>
               </Grid>
               <Grid item xs={false} sm={false} md={1} lg={1} className={"disable-padding"}>
-              </Grid>
+          </Grid>
             </Grid>
-      </div>
+        )
+        }}
+</Query>
+      </div >
     );
+
   }
 }
 
@@ -245,4 +175,4 @@ HomePage.propTypes = {
   theme: PropTypes.object.isRequired,
 };
 
-export default withStyles(styles, { withTheme: true })(HomePage);
+export default withApollo(withStyles(styles, { withTheme: true })(HomePage));
