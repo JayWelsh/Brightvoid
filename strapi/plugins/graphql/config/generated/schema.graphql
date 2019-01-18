@@ -1,3 +1,189 @@
+"""A piece of Brightvoid art."""
+type Artwork {
+  _id: ID!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  name: String
+  visible: Boolean
+  description: String
+  seo: String
+  images(sort: String, limit: Int, start: Int, where: JSON): [UploadFile]
+  products(sort: String, limit: Int, start: Int, where: JSON): [Product]
+  imagecollections(sort: String, limit: Int, start: Int, where: JSON): [Imagecollection]
+}
+
+type ArtworkAggregator {
+  count: Int
+}
+
+type ArtworkConnection {
+  values: [Artwork]
+  groupBy: ArtworkGroupBy
+  aggregate: ArtworkAggregator
+}
+
+type ArtworkConnection_id {
+  key: ID
+  connection: ArtworkConnection
+}
+
+type ArtworkConnectionCreatedAt {
+  key: DateTime
+  connection: ArtworkConnection
+}
+
+type ArtworkConnectionDescription {
+  key: String
+  connection: ArtworkConnection
+}
+
+type ArtworkConnectionName {
+  key: String
+  connection: ArtworkConnection
+}
+
+type ArtworkConnectionSeo {
+  key: String
+  connection: ArtworkConnection
+}
+
+type ArtworkConnectionUpdatedAt {
+  key: DateTime
+  connection: ArtworkConnection
+}
+
+type ArtworkConnectionVisible {
+  key: Boolean
+  connection: ArtworkConnection
+}
+
+type ArtworkGroupBy {
+  _id: [ArtworkConnection_id]
+  createdAt: [ArtworkConnectionCreatedAt]
+  updatedAt: [ArtworkConnectionUpdatedAt]
+  name: [ArtworkConnectionName]
+  visible: [ArtworkConnectionVisible]
+  description: [ArtworkConnectionDescription]
+  seo: [ArtworkConnectionSeo]
+}
+
+input ArtworkInput {
+  name: String
+  images: [ID]
+  visible: Boolean
+  description: String
+  products: [ID]
+  seo: String
+  imagecollections: [ID]
+}
+
+"""Core constituents styled by artwork"""
+type Barebone {
+  _id: ID!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  name: String
+  productid: Int
+  initobj: JSON
+  price: Float
+  product: Product
+  variants(sort: String, limit: Int, start: Int, where: JSON): [Variants]
+}
+
+type BareboneAggregator {
+  count: Int
+  sum: BareboneAggregatorSum
+  avg: BareboneAggregatorAvg
+  min: BareboneAggregatorMin
+  max: BareboneAggregatorMax
+}
+
+type BareboneAggregatorAvg {
+  productid: Float
+  price: Float
+}
+
+type BareboneAggregatorMax {
+  productid: Float
+  price: Float
+}
+
+type BareboneAggregatorMin {
+  productid: Float
+  price: Float
+}
+
+type BareboneAggregatorSum {
+  productid: Float
+  price: Float
+}
+
+type BareboneConnection {
+  values: [Barebone]
+  groupBy: BareboneGroupBy
+  aggregate: BareboneAggregator
+}
+
+type BareboneConnection_id {
+  key: ID
+  connection: BareboneConnection
+}
+
+type BareboneConnectionCreatedAt {
+  key: DateTime
+  connection: BareboneConnection
+}
+
+type BareboneConnectionInitobj {
+  key: JSON
+  connection: BareboneConnection
+}
+
+type BareboneConnectionName {
+  key: String
+  connection: BareboneConnection
+}
+
+type BareboneConnectionPrice {
+  key: Float
+  connection: BareboneConnection
+}
+
+type BareboneConnectionProduct {
+  key: ID
+  connection: BareboneConnection
+}
+
+type BareboneConnectionProductid {
+  key: Int
+  connection: BareboneConnection
+}
+
+type BareboneConnectionUpdatedAt {
+  key: DateTime
+  connection: BareboneConnection
+}
+
+type BareboneGroupBy {
+  _id: [BareboneConnection_id]
+  createdAt: [BareboneConnectionCreatedAt]
+  updatedAt: [BareboneConnectionUpdatedAt]
+  name: [BareboneConnectionName]
+  productid: [BareboneConnectionProductid]
+  initobj: [BareboneConnectionInitobj]
+  price: [BareboneConnectionPrice]
+  product: [BareboneConnectionProduct]
+}
+
+input BareboneInput {
+  name: String
+  productid: Int
+  initobj: JSON
+  price: Float
+  variants: [ID]
+  product: ID
+}
+
 """A slide in a carousel or slideshow"""
 type Carouselslide {
   _id: ID!
@@ -79,12 +265,36 @@ input CarouselslideInput {
   featured: Boolean
 }
 
+input createArtworkInput {
+  data: ArtworkInput
+}
+
+type createArtworkPayload {
+  artwork: Artwork
+}
+
+input createBareboneInput {
+  data: BareboneInput
+}
+
+type createBarebonePayload {
+  barebone: Barebone
+}
+
 input createCarouselslideInput {
   data: CarouselslideInput
 }
 
 type createCarouselslidePayload {
   carouselslide: Carouselslide
+}
+
+input createImagecollectionInput {
+  data: ImagecollectionInput
+}
+
+type createImagecollectionPayload {
+  imagecollection: Imagecollection
 }
 
 input createProductInput {
@@ -111,10 +321,34 @@ type createUserPayload {
   user: UsersPermissionsUser
 }
 
+input createVariantsInput {
+  data: VariantsInput
+}
+
+type createVariantsPayload {
+  variant: Variants
+}
+
 """
 The `DateTime` scalar represents a date and time following the ISO 8601 standard
 """
 scalar DateTime
+
+input deleteArtworkInput {
+  where: InputID
+}
+
+type deleteArtworkPayload {
+  artwork: Artwork
+}
+
+input deleteBareboneInput {
+  where: InputID
+}
+
+type deleteBarebonePayload {
+  barebone: Barebone
+}
 
 input deleteCarouselslideInput {
   where: InputID
@@ -122,6 +356,14 @@ input deleteCarouselslideInput {
 
 type deleteCarouselslidePayload {
   carouselslide: Carouselslide
+}
+
+input deleteImagecollectionInput {
+  where: InputID
+}
+
+type deleteImagecollectionPayload {
+  imagecollection: Imagecollection
 }
 
 input deleteProductInput {
@@ -148,6 +390,14 @@ type deleteUserPayload {
   user: UsersPermissionsUser
 }
 
+input deleteVariantsInput {
+  where: InputID
+}
+
+type deleteVariantsPayload {
+  variant: Variants
+}
+
 input FileInput {
   name: String!
   hash: String!
@@ -161,6 +411,72 @@ input FileInput {
   related: [ID]
 }
 
+type Imagecollection {
+  _id: ID!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  name: String
+  product: Product
+  artwork: Artwork
+  images(sort: String, limit: Int, start: Int, where: JSON): [UploadFile]
+}
+
+type ImagecollectionAggregator {
+  count: Int
+}
+
+type ImagecollectionConnection {
+  values: [Imagecollection]
+  groupBy: ImagecollectionGroupBy
+  aggregate: ImagecollectionAggregator
+}
+
+type ImagecollectionConnection_id {
+  key: ID
+  connection: ImagecollectionConnection
+}
+
+type ImagecollectionConnectionArtwork {
+  key: ID
+  connection: ImagecollectionConnection
+}
+
+type ImagecollectionConnectionCreatedAt {
+  key: DateTime
+  connection: ImagecollectionConnection
+}
+
+type ImagecollectionConnectionName {
+  key: String
+  connection: ImagecollectionConnection
+}
+
+type ImagecollectionConnectionProduct {
+  key: ID
+  connection: ImagecollectionConnection
+}
+
+type ImagecollectionConnectionUpdatedAt {
+  key: DateTime
+  connection: ImagecollectionConnection
+}
+
+type ImagecollectionGroupBy {
+  _id: [ImagecollectionConnection_id]
+  createdAt: [ImagecollectionConnectionCreatedAt]
+  updatedAt: [ImagecollectionConnectionUpdatedAt]
+  name: [ImagecollectionConnectionName]
+  product: [ImagecollectionConnectionProduct]
+  artwork: [ImagecollectionConnectionArtwork]
+}
+
+input ImagecollectionInput {
+  name: String
+  product: ID
+  artwork: ID
+  images: [ID]
+}
+
 input InputID {
   id: ID!
 }
@@ -170,15 +486,27 @@ The `JSON` scalar type represents JSON values as specified by [ECMA-404](http://
 """
 scalar JSON
 
-union Morph = UsersPermissionsMe | UsersPermissionsMeRole | Carouselslide | createCarouselslidePayload | updateCarouselslidePayload | deleteCarouselslidePayload | CarouselslideConnection | CarouselslideAggregator | CarouselslideGroupBy | CarouselslideConnection_id | CarouselslideConnectionCreatedAt | CarouselslideConnectionUpdatedAt | CarouselslideConnectionTitle | CarouselslideConnectionLink | CarouselslideConnectionForegroundimage | CarouselslideConnectionBackgroundimage | CarouselslideConnectionFeatured | Product | createProductPayload | updateProductPayload | deleteProductPayload | ProductConnection | ProductAggregator | ProductAggregatorSum | ProductAggregatorAvg | ProductAggregatorMin | ProductAggregatorMax | ProductGroupBy | ProductConnection_id | ProductConnectionCreatedAt | ProductConnectionUpdatedAt | ProductConnectionName | ProductConnectionSeo | ProductConnectionPrice | ProductConnectionDescription | UploadFile | UploadFileConnection | UploadFileAggregator | UploadFileGroupBy | UploadFileConnection_id | UploadFileConnectionCreatedAt | UploadFileConnectionUpdatedAt | UploadFileConnectionName | UploadFileConnectionHash | UploadFileConnectionSha256 | UploadFileConnectionExt | UploadFileConnectionMime | UploadFileConnectionSize | UploadFileConnectionUrl | UploadFileConnectionProvider | UploadFileConnectionPublic_id | UsersPermissionsPermission | UsersPermissionsRole | createRolePayload | updateRolePayload | deleteRolePayload | UsersPermissionsRoleConnection | UsersPermissionsRoleAggregator | UsersPermissionsRoleGroupBy | UsersPermissionsRoleConnection_id | UsersPermissionsRoleConnectionName | UsersPermissionsRoleConnectionDescription | UsersPermissionsRoleConnectionType | UsersPermissionsUser | createUserPayload | updateUserPayload | deleteUserPayload | UsersPermissionsUserConnection | UsersPermissionsUserAggregator | UsersPermissionsUserGroupBy | UsersPermissionsUserConnection_id | UsersPermissionsUserConnectionUsername | UsersPermissionsUserConnectionEmail | UsersPermissionsUserConnectionProvider | UsersPermissionsUserConnectionConfirmed | UsersPermissionsUserConnectionBlocked | UsersPermissionsUserConnectionRole
+union Morph = UsersPermissionsMe | UsersPermissionsMeRole | Artwork | createArtworkPayload | updateArtworkPayload | deleteArtworkPayload | ArtworkConnection | ArtworkAggregator | ArtworkGroupBy | ArtworkConnection_id | ArtworkConnectionCreatedAt | ArtworkConnectionUpdatedAt | ArtworkConnectionName | ArtworkConnectionVisible | ArtworkConnectionDescription | ArtworkConnectionSeo | Barebone | createBarebonePayload | updateBarebonePayload | deleteBarebonePayload | BareboneConnection | BareboneAggregator | BareboneAggregatorSum | BareboneAggregatorAvg | BareboneAggregatorMin | BareboneAggregatorMax | BareboneGroupBy | BareboneConnection_id | BareboneConnectionCreatedAt | BareboneConnectionUpdatedAt | BareboneConnectionName | BareboneConnectionProductid | BareboneConnectionInitobj | BareboneConnectionPrice | BareboneConnectionProduct | Carouselslide | createCarouselslidePayload | updateCarouselslidePayload | deleteCarouselslidePayload | CarouselslideConnection | CarouselslideAggregator | CarouselslideGroupBy | CarouselslideConnection_id | CarouselslideConnectionCreatedAt | CarouselslideConnectionUpdatedAt | CarouselslideConnectionTitle | CarouselslideConnectionLink | CarouselslideConnectionForegroundimage | CarouselslideConnectionBackgroundimage | CarouselslideConnectionFeatured | Imagecollection | createImagecollectionPayload | updateImagecollectionPayload | deleteImagecollectionPayload | ImagecollectionConnection | ImagecollectionAggregator | ImagecollectionGroupBy | ImagecollectionConnection_id | ImagecollectionConnectionCreatedAt | ImagecollectionConnectionUpdatedAt | ImagecollectionConnectionName | ImagecollectionConnectionProduct | ImagecollectionConnectionArtwork | Product | createProductPayload | updateProductPayload | deleteProductPayload | ProductConnection | ProductAggregator | ProductAggregatorSum | ProductAggregatorAvg | ProductAggregatorMin | ProductAggregatorMax | ProductGroupBy | ProductConnection_id | ProductConnectionCreatedAt | ProductConnectionUpdatedAt | ProductConnectionName | ProductConnectionSeo | ProductConnectionPrice | ProductConnectionDescription | ProductConnectionBarebone | Variants | createVariantsPayload | updateVariantsPayload | deleteVariantsPayload | VariantsConnection | VariantsAggregator | VariantsAggregatorSum | VariantsAggregatorAvg | VariantsAggregatorMin | VariantsAggregatorMax | VariantsGroupBy | VariantsConnection_id | VariantsConnectionCreatedAt | VariantsConnectionUpdatedAt | VariantsConnectionVariantid | VariantsConnectionName | VariantsConnectionAvailable | VariantsConnectionBarebone | VariantsConnectionColour | VariantsConnectionSize | UploadFile | UploadFileConnection | UploadFileAggregator | UploadFileGroupBy | UploadFileConnection_id | UploadFileConnectionCreatedAt | UploadFileConnectionUpdatedAt | UploadFileConnectionName | UploadFileConnectionHash | UploadFileConnectionSha256 | UploadFileConnectionExt | UploadFileConnectionMime | UploadFileConnectionSize | UploadFileConnectionUrl | UploadFileConnectionProvider | UploadFileConnectionPublic_id | UsersPermissionsPermission | UsersPermissionsRole | createRolePayload | updateRolePayload | deleteRolePayload | UsersPermissionsRoleConnection | UsersPermissionsRoleAggregator | UsersPermissionsRoleGroupBy | UsersPermissionsRoleConnection_id | UsersPermissionsRoleConnectionName | UsersPermissionsRoleConnectionDescription | UsersPermissionsRoleConnectionType | UsersPermissionsUser | createUserPayload | updateUserPayload | deleteUserPayload | UsersPermissionsUserConnection | UsersPermissionsUserAggregator | UsersPermissionsUserGroupBy | UsersPermissionsUserConnection_id | UsersPermissionsUserConnectionUsername | UsersPermissionsUserConnectionEmail | UsersPermissionsUserConnectionProvider | UsersPermissionsUserConnectionConfirmed | UsersPermissionsUserConnectionBlocked | UsersPermissionsUserConnectionRole
 
 type Mutation {
+  createArtwork(input: createArtworkInput): createArtworkPayload
+  updateArtwork(input: updateArtworkInput): updateArtworkPayload
+  deleteArtwork(input: deleteArtworkInput): deleteArtworkPayload
+  createBarebone(input: createBareboneInput): createBarebonePayload
+  updateBarebone(input: updateBareboneInput): updateBarebonePayload
+  deleteBarebone(input: deleteBareboneInput): deleteBarebonePayload
   createCarouselslide(input: createCarouselslideInput): createCarouselslidePayload
   updateCarouselslide(input: updateCarouselslideInput): updateCarouselslidePayload
   deleteCarouselslide(input: deleteCarouselslideInput): deleteCarouselslidePayload
+  createImagecollection(input: createImagecollectionInput): createImagecollectionPayload
+  updateImagecollection(input: updateImagecollectionInput): updateImagecollectionPayload
+  deleteImagecollection(input: deleteImagecollectionInput): deleteImagecollectionPayload
   createProduct(input: createProductInput): createProductPayload
   updateProduct(input: updateProductInput): updateProductPayload
   deleteProduct(input: deleteProductInput): deleteProductPayload
+  createVariants(input: createVariantsInput): createVariantsPayload
+  updateVariants(input: updateVariantsInput): updateVariantsPayload
+  deleteVariants(input: deleteVariantsInput): deleteVariantsPayload
 
   """Create a new role"""
   createRole(input: createRoleInput): createRolePayload
@@ -203,7 +531,9 @@ type Product {
   seo: String
   price: Float
   description: String
-  images(sort: String, limit: Int, start: Int, where: JSON): [UploadFile]
+  barebone: Barebone
+  artwork(sort: String, limit: Int, start: Int, where: JSON): [Artwork]
+  imagecollections(sort: String, limit: Int, start: Int, where: JSON): [Imagecollection]
 }
 
 type ProductAggregator {
@@ -237,6 +567,11 @@ type ProductConnection {
 }
 
 type ProductConnection_id {
+  key: ID
+  connection: ProductConnection
+}
+
+type ProductConnectionBarebone {
   key: ID
   connection: ProductConnection
 }
@@ -279,6 +614,7 @@ type ProductGroupBy {
   seo: [ProductConnectionSeo]
   price: [ProductConnectionPrice]
   description: [ProductConnectionDescription]
+  barebone: [ProductConnectionBarebone]
 }
 
 input ProductInput {
@@ -286,16 +622,30 @@ input ProductInput {
   seo: String
   price: Float
   description: String
-  images: [ID]
+  artwork: [ID]
+  barebone: ID
+  imagecollections: [ID]
 }
 
 type Query {
+  artwork(id: ID!): Artwork
+  artworks(sort: String, limit: Int, start: Int, where: JSON): [Artwork]
+  artworksConnection(sort: String, limit: Int, start: Int, where: JSON): ArtworkConnection
+  barebone(id: ID!): Barebone
+  barebones(sort: String, limit: Int, start: Int, where: JSON): [Barebone]
+  barebonesConnection(sort: String, limit: Int, start: Int, where: JSON): BareboneConnection
   carouselslide(id: ID!): Carouselslide
   carouselslides(sort: String, limit: Int, start: Int, where: JSON): [Carouselslide]
   carouselslidesConnection(sort: String, limit: Int, start: Int, where: JSON): CarouselslideConnection
+  imagecollection(id: ID!): Imagecollection
+  imagecollections(sort: String, limit: Int, start: Int, where: JSON): [Imagecollection]
+  imagecollectionsConnection(sort: String, limit: Int, start: Int, where: JSON): ImagecollectionConnection
   product(id: ID!): Product
   products(sort: String, limit: Int, start: Int, where: JSON): [Product]
   productsConnection(sort: String, limit: Int, start: Int, where: JSON): ProductConnection
+  variant(id: ID!): Variants
+  variants(sort: String, limit: Int, start: Int, where: JSON): [Variants]
+  variantsConnection(sort: String, limit: Int, start: Int, where: JSON): VariantsConnection
   files(sort: String, limit: Int, start: Int, where: JSON): [UploadFile]
   filesConnection(sort: String, limit: Int, start: Int, where: JSON): UploadFileConnection
   role(id: ID!): UsersPermissionsRole
@@ -319,6 +669,24 @@ input RoleInput {
   users: [ID]
 }
 
+input updateArtworkInput {
+  where: InputID
+  data: ArtworkInput
+}
+
+type updateArtworkPayload {
+  artwork: Artwork
+}
+
+input updateBareboneInput {
+  where: InputID
+  data: BareboneInput
+}
+
+type updateBarebonePayload {
+  barebone: Barebone
+}
+
 input updateCarouselslideInput {
   where: InputID
   data: CarouselslideInput
@@ -326,6 +694,15 @@ input updateCarouselslideInput {
 
 type updateCarouselslidePayload {
   carouselslide: Carouselslide
+}
+
+input updateImagecollectionInput {
+  where: InputID
+  data: ImagecollectionInput
+}
+
+type updateImagecollectionPayload {
+  imagecollection: Imagecollection
 }
 
 input updateProductInput {
@@ -353,6 +730,15 @@ input updateUserInput {
 
 type updateUserPayload {
   user: UsersPermissionsUser
+}
+
+input updateVariantsInput {
+  where: InputID
+  data: VariantsInput
+}
+
+type updateVariantsPayload {
+  variant: Variants
 }
 
 """
@@ -606,4 +992,113 @@ type UsersPermissionsUserGroupBy {
   confirmed: [UsersPermissionsUserConnectionConfirmed]
   blocked: [UsersPermissionsUserConnectionBlocked]
   role: [UsersPermissionsUserConnectionRole]
+}
+
+"""Variants of barebones connected to supplier IDs"""
+type Variants {
+  _id: ID!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  variantid: Int
+  name: String
+  available: Boolean
+  barebone: Barebone
+  colour: String
+  size: String
+}
+
+type VariantsAggregator {
+  count: Int
+  sum: VariantsAggregatorSum
+  avg: VariantsAggregatorAvg
+  min: VariantsAggregatorMin
+  max: VariantsAggregatorMax
+}
+
+type VariantsAggregatorAvg {
+  variantid: Float
+}
+
+type VariantsAggregatorMax {
+  variantid: Float
+}
+
+type VariantsAggregatorMin {
+  variantid: Float
+}
+
+type VariantsAggregatorSum {
+  variantid: Float
+}
+
+type VariantsConnection {
+  values: [Variants]
+  groupBy: VariantsGroupBy
+  aggregate: VariantsAggregator
+}
+
+type VariantsConnection_id {
+  key: ID
+  connection: VariantsConnection
+}
+
+type VariantsConnectionAvailable {
+  key: Boolean
+  connection: VariantsConnection
+}
+
+type VariantsConnectionBarebone {
+  key: ID
+  connection: VariantsConnection
+}
+
+type VariantsConnectionColour {
+  key: String
+  connection: VariantsConnection
+}
+
+type VariantsConnectionCreatedAt {
+  key: DateTime
+  connection: VariantsConnection
+}
+
+type VariantsConnectionName {
+  key: String
+  connection: VariantsConnection
+}
+
+type VariantsConnectionSize {
+  key: String
+  connection: VariantsConnection
+}
+
+type VariantsConnectionUpdatedAt {
+  key: DateTime
+  connection: VariantsConnection
+}
+
+type VariantsConnectionVariantid {
+  key: Int
+  connection: VariantsConnection
+}
+
+type VariantsGroupBy {
+  _id: [VariantsConnection_id]
+  createdAt: [VariantsConnectionCreatedAt]
+  updatedAt: [VariantsConnectionUpdatedAt]
+  variantid: [VariantsConnectionVariantid]
+  name: [VariantsConnectionName]
+  available: [VariantsConnectionAvailable]
+  barebone: [VariantsConnectionBarebone]
+  colour: [VariantsConnectionColour]
+  size: [VariantsConnectionSize]
+}
+
+input VariantsInput {
+  variantid: Int
+  name: String
+  available: Boolean
+  barebone: ID
+  colour: String
+  size: String
 }

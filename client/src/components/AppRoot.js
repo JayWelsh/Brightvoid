@@ -21,6 +21,11 @@ import {configureHistory, isPrefixWWW} from '../utils';
 import ApolloClient from 'apollo-boost';
 import { ApolloProvider } from "react-apollo";
 import PageContainer from './PageContainer';
+import Footer from './Footer';
+import Cart from './Cart';
+import { connect } from 'react-redux';
+import store from '../state';
+import { setScreenHeight, setScreenWidth } from '../state/actions';
 
 let endpointGraphQL = "https://brightvoid.com/graphql";
 if(isPrefixWWW()){
@@ -28,7 +33,7 @@ if(isPrefixWWW()){
 };
 
 if (process.env.NODE_ENV !== 'production' || process.env.REACT_APP_FORCE_LOCALHOST) {
-  endpointGraphQL = "http://localhost:1337/graphql"
+  endpointGraphQL = "http://192.168.1.45:1337/graphql"
 }
 
 const client = new ApolloClient({
@@ -62,7 +67,6 @@ const styles = {
   },
   content: {
     flexGrow: 1,
-    backgroundColor: theme.palette.background.default,
     padding: 0,
     transition: theme.transitions.create('margin', {
       easing: theme.transitions.easing.sharp,
@@ -76,15 +80,39 @@ const history = configureHistory()
 class AppRoot extends React.Component {
     constructor(props) {
         super(props);
+        this.AppBarElement = React.createRef();
         this.state = {
-            left: false
+            left: false,
         };
     }
+
     toggleDrawer = (side, open) => () => {
         this.setState({
             [side]: open,
         });
     };
+
+    checkScreenDimensions = () => {
+      if(window.innerHeight !== store.getState().screenHeight){
+        this.props.dispatch(setScreenHeight(window.innerHeight));
+      }
+      if(window.innerWidth !== store.getState().screenWidth){
+        this.props.dispatch(setScreenWidth(window.innerWidth));
+      }
+    }
+  
+    componentDidMount() {
+      if (!this.isConsideredMobile) {
+        window.addEventListener('resize', this.checkScreenDimensions);
+      }
+    }
+  
+    componentWillUnmount() {
+      if (!this.isConsideredMobile) {
+        window.removeEventListener('resize', this.checkScreenDimensions);
+      }
+    }
+
   render() {
     const { classes } = this.props;
     const { anchor } = this.state;
@@ -99,30 +127,30 @@ class AppRoot extends React.Component {
       this.setState({ anchor: "left" });
     }
     const sideList = (
-        <div className={classes.list}>
-          <List>
-            {['Home'].map((text, index) => (
-              <Link to={'/'} className={"no-decoration"} key={text}>
+      <div className={classes.list}>
+        <List>
+          {['Home'].map((text, index) => (
+            <Link to={'/'} className={"no-decoration"} key={text}>
               <ListItem button>
                 <ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon>
                 <ListItemText primary={text} />
               </ListItem>
-              </Link>
-            ))}
-          </List>
-          <Divider />
-          <List>
-            {['Artwork'].map((text, index) => (
-              <Link to={'/artwork'} className={"no-decoration"} key={text}>
+            </Link>
+          ))}
+        </List>
+        <Divider />
+        <List>
+          {['Artwork'].map((text, index) => (
+            <Link to={'/artwork/'} className={"no-decoration"} key={text}>
               <ListItem button key={text}>
                 <ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon>
                 <ListItemText primary={text} />
               </ListItem>
-              </Link>
-            ))}
-          </List>
-        </div>
-      );
+            </Link>
+          ))}
+        </List>
+      </div>
+    );
   return (
     <Router history={history}>
       <ApolloProvider client={client}>
@@ -138,22 +166,30 @@ class AppRoot extends React.Component {
                   {sideList}
                 </div>
               </Drawer>
-              <AppBar className={"our-gradient"} position="static">
-                  <Toolbar>
+              <AppBar ref={this.AppBarElement} className={"no-opacity"} position="static">
+              <Toolbar>
+               </Toolbar>
+              </AppBar>
+              <AppBar ref={this.AppBarElement} className={"our-gradient"} position="fixed">
+                <Toolbar>
                   <IconButton onClick={this.toggleDrawer('left', true)} className={classes.menuButton} color="inherit" aria-label="Menu">
-                      <MenuIcon />
+                    <MenuIcon />
                   </IconButton>
                   <div className={"header-logo full-width"}>
                     <Link to={'/'} className={"no-decoration"}>
                       <img alt="Brightvoid Logo" src={BrightvoidLogo} />
                     </Link>
                   </div>
-                  <Button color="inherit">Login</Button>
-                  </Toolbar>
+                  <h1>
+                    {this.AppBarElement.current && this.AppBarElement.current.clientHeight}
+                  </h1>
+                  <Cart />
+                </Toolbar>
               </AppBar>
               <main className={classes.content}>
                 <PageContainer isConsideredMobile={isConsideredMobile} />
               </main>
+              <Footer/>
           </div>
         </MuiThemeProvider>
       </ApolloProvider>
@@ -166,4 +202,4 @@ AppRoot.propTypes = {
   classes: PropTypes.object.isRequired,
 };
 
-export default withStyles(styles)(AppRoot);
+export default withStyles(styles)(connect()(AppRoot));

@@ -8,7 +8,6 @@ import CarouselButtons from './CarouselButtons';
 
 const styles = theme => ({
   root: {
-    backgroundColor: theme.palette.background.paper,
     width: '100%',
     margin: '0px'
   }
@@ -39,7 +38,6 @@ class OurImageGallery extends React.Component {
             imageSliderElement.scrollLeft = (imagePosition.left - imageSliderPosition.left) + imageSliderElement.scrollLeft;
         }
         if (index !== this.state.value && (!this.state.dragging)) {
-            console.log("index", index)
             this.setState({ value: index });
         }
     };
@@ -63,7 +61,6 @@ class OurImageGallery extends React.Component {
             let setScrollDifference = (this.state.startScrollFrom - e.pageX) + lastSetScroll;
             let imageSliderAvailableScroll = (imageSlider.scrollWidth - imageSlider.clientWidth);
             if((scrollDifference > 20) || (scrollDifference < -20)){
-                console.log("scrollDifference",scrollDifference);
                 disableImageSelection = true;
             }
             if ((setScrollDifference <= imageSliderAvailableScroll) && (setScrollDifference >= -imageSliderAvailableScroll)) {
@@ -90,7 +87,7 @@ class OurImageGallery extends React.Component {
     }
 
   render() {
-    const { classes, images } = this.props;
+    const { classes, images, disableOverview } = this.props;
     const { value, dragging, disableImageSelection } = this.state;
     let galleryStyle = { paddingTop: 0 };
     let animateScrollClass = dragging ? '' : ' animate-scroll';
@@ -99,23 +96,34 @@ class OurImageGallery extends React.Component {
         <div className={classes.root} style={galleryStyle}>
             <Grid container className={classes.root} spacing={24}>
                 <Grid item xs={12} sm={12} md={12} lg={12}>
-                    <Card className='darkCardBackground'>
-                        <div className={'our-gallery-selected-image flex-center'}>
-                            <CarouselButtons prevHandler={this.prevHandler} nextHandler={this.nextHandler} index={value} total={images.length}/>
-                            <img className={'our-gallery-image'} src={images[value].url} alt={images[value].title}></img>
-                        </div>
-                        <div ref={this.imageSlider} className={"our-gallery-image-slider overflow-x-scroll overflow-y-hide" + animateScrollClass} onMouseDown={(e) => { this.setDragging(true, e)}} onMouseUp={(e) => { this.setDragging(false, e)}} onMouseLeave={(e) => { this.setDragging(false, e)}} onMouseMove={(e) => { this.dragScroll(e) }}>
-                            <div className={'our-gallery-items inline-flex'}>
-                                {images.map((image, index) => {
-                                    let selectionClass = index === value ? " our-gallery-selection" : "";
-                                    return (
-                                        <div className={'our-gallery-single-image-container pointer' + selectionClass + disableClicksOnSelection} ref={(element) => { this.imageCollection[index] = element }} onClick={(e) => { this.handleChangeIndex(index) }} key={index}>
-                                            <img className={'our-gallery-image our-gallery-image-item'} src={image.url} alt={image.title}></img>
-                                        </div>
-                                    )
-                                })}
+                    <Card className='dark-transparent'>
+                       
+                            <div>
+                                {images && images[value] &&
+                                    <div className={'our-gallery-selected-image flex-center'}>
+                                        <CarouselButtons prevHandler={this.prevHandler} nextHandler={this.nextHandler} index={value} total={images.length} />
+                                        <img className={'our-gallery-image'} src={images[value].url} alt={images[value].title}></img>
+                                    </div>
+                                }
+                                {(!images || (images.length === 0)) &&
+                                    <div className={'our-gallery-selected-image flex-center our-gallery-image'}>
+                                    </div>
+                                }
+                                {!disableOverview &&
+                                <div ref={this.imageSlider} className={"our-gallery-image-slider overflow-x-scroll overflow-y-hide" + animateScrollClass} onMouseDown={(e) => { this.setDragging(true, e) }} onMouseUp={(e) => { this.setDragging(false, e) }} onMouseLeave={(e) => { this.setDragging(false, e) }} onMouseMove={(e) => { this.dragScroll(e) }}>
+                                    <div className={'our-gallery-items inline-flex'}>
+                                        {images && images[value] && images.map((image, index) => {
+                                            let selectionClass = index === value ? " our-gallery-selection" : "";
+                                            return (
+                                                <div className={'our-gallery-single-image-container pointer' + selectionClass + disableClicksOnSelection} ref={(element) => { this.imageCollection[index] = element }} onClick={(e) => { this.handleChangeIndex(index) }} key={index}>
+                                                    <img className={'our-gallery-image our-gallery-image-item'} src={image.url} alt={image.title}></img>
+                                                </div>
+                                            )
+                                        })}
+                                    </div>
+                                </div>
+                                }
                             </div>
-                        </div>
                     </Card>
                 </Grid>
             </Grid>

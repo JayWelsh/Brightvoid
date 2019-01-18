@@ -1,0 +1,44 @@
+{
+  "connection": "default",
+  "collectionName": "artwork",
+  "info": {
+    "name": "artwork",
+    "description": "A piece of Brightvoid art."
+  },
+  "options": {
+    "timestamps": true
+  },
+  "attributes": {
+    "name": {
+      "default": "",
+      "type": "string"
+    },
+    "images": {
+      "collection": "file",
+      "via": "related",
+      "plugin": "upload",
+      "required": false
+    },
+    "visible": {
+      "default": false,
+      "type": "boolean"
+    },
+    "description": {
+      "default": "",
+      "type": "text"
+    },
+    "products": {
+      "collection": "product",
+      "dominant": true,
+      "via": "artwork"
+    },
+    "seo": {
+      "default": "",
+      "type": "string"
+    },
+    "imagecollections": {
+      "collection": "imagecollection",
+      "via": "artwork"
+    }
+  }
+}

@@ -1,0 +1,37 @@
+{
+  "connection": "default",
+  "collectionName": "barebone",
+  "info": {
+    "name": "barebone",
+    "description": "Core constituents styled by artwork"
+  },
+  "options": {
+    "timestamps": true
+  },
+  "attributes": {
+    "name": {
+      "default": "",
+      "type": "string"
+    },
+    "productid": {
+      "default": "",
+      "type": "integer"
+    },
+    "initobj": {
+      "default": "",
+      "type": "json"
+    },
+    "price": {
+      "default": "",
+      "type": "decimal"
+    },
+    "variants": {
+      "collection": "variants",
+      "via": "barebone"
+    },
+    "product": {
+      "model": "product",
+      "via": "barebone"
+    }
+  }
+}

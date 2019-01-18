@@ -25,11 +25,17 @@
       "default": "",
       "type": "text"
     },
-    "images": {
-      "collection": "file",
-      "via": "related",
-      "plugin": "upload",
-      "required": false
+    "artwork": {
+      "collection": "artwork",
+      "via": "products"
+    },
+    "barebone": {
+      "model": "barebone",
+      "via": "product"
+    },
+    "imagecollections": {
+      "collection": "imagecollection",
+      "via": "product"
     }
   }
 }

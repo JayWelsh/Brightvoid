@@ -1,0 +1,52 @@
+{
+  "routes": [
+    {
+      "method": "GET",
+      "path": "/barebones",
+      "handler": "Barebone.find",
+      "config": {
+        "policies": []
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/barebones/count",
+      "handler": "Barebone.count",
+      "config": {
+        "policies": []
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/barebones/:_id",
+      "handler": "Barebone.findOne",
+      "config": {
+        "policies": []
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/barebones",
+      "handler": "Barebone.create",
+      "config": {
+        "policies": []
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/barebones/:_id",
+      "handler": "Barebone.update",
+      "config": {
+        "policies": []
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/barebones/:_id",
+      "handler": "Barebone.destroy",
+      "config": {
+        "policies": []
+      }
+    }
+  ]
+}

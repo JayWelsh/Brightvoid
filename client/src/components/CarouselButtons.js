@@ -1,6 +1,6 @@
 import React from 'react'
 import propTypes from 'prop-types'
-import Button from '@material-ui/core/Button';
+import Fab from '@material-ui/core/Fab';
 import {withStyles} from '@material-ui/core/styles';
 import NavigateNext from '@material-ui/icons/NavigateNext';
 import NavigateBefore from '@material-ui/icons/NavigateBefore';
@@ -43,16 +43,16 @@ function CarouselButtons (props) {
       { (loop || index !== 0) && (
         
         <div className={classes.btn + " " + classes.left + " disable-webkit-tap-highlight"} onClick={prevHandler}>
-          <Button variant="fab" color="secondary" aria-label="Previous Slide" className={classes.button}>
+          <Fab color="secondary" aria-label="Previous Slide" className={classes.button}>
             <NavigateBefore />
-          </Button>
+          </Fab>
         </div>
       )}
       { (loop || index !== total - 1) && (
         <div className={classes.btn + " " + classes.right + " disable-webkit-tap-highlight"} onClick={nextHandler}>
-          <Button variant="fab" color="secondary" aria-label="Next Slide" className={classes.button}>
+          <Fab color="secondary" aria-label="Next Slide" className={classes.button}>
           <NavigateNext />
-        </Button>
+        </Fab>
         </div>
       )}
     </div>
