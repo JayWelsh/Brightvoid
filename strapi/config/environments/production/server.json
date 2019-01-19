@@ -1,5 +1,5 @@
 {
-  "host": "brightvoid.com",
+  "host": "localhost",
   "port": "1337",
   "proxy": {
     "enabled": false
