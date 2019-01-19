@@ -27,10 +27,7 @@ import { connect } from 'react-redux';
 import store from '../state';
 import { setScreenHeight, setScreenWidth } from '../state/actions';
 
-let endpointGraphQL = "https://brightvoid.com/graphql";
-if(isPrefixWWW()){
-  endpointGraphQL = "https://www.brightvoid.com/graphql";
-};
+let endpointGraphQL = "https://api.brightvoid.com/graphql";
 
 if (process.env.NODE_ENV !== 'production' || process.env.REACT_APP_FORCE_LOCALHOST) {
   endpointGraphQL = "http://192.168.1.45:1337/graphql"
