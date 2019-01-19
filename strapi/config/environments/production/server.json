@@ -1,6 +1,6 @@
 {
-  "host": "localhost",
-  "port": "${process.env.PORT || 1337}",
+  "host": "brightvoid.com",
+  "port": "1337",
   "proxy": {
     "enabled": false
   },
@@ -11,6 +11,7 @@
     "enabled": false
   },
   "admin": {
-    "autoOpen": false
+    "autoOpen": false,
+    "path": "${process.env.STRAPI_ADMIN_PATH}"
   }
 }

@@ -10,8 +10,6 @@
 // Public dependencies.
 const _ = require('lodash');
 
-const { models: { mergeStages } } = require('strapi-utils');
-
 module.exports = {
 
   /**
@@ -20,24 +18,22 @@ module.exports = {
    * @return {Promise}
    */
 
-  fetchAll: (params, next, { populate } = {}) => {
+  fetchAll: (params) => {
     // Convert `params` object to filters compatible with Mongo.
     const filters = strapi.utils.models.convertParams('product', params);
-    const hook = strapi.hook[Product.orm];
-    // Generate stages.
-    const populateStage = hook.load().generateLookupStage(Product, { whitelistedPopulate: populate }); // Nested-Population
-    const matchStage = hook.load().generateMatchStage(Product, filters); // Nested relation filter
-    const aggregateStages = mergeStages(populateStage, matchStage);
+    // Select field to populate.
+    const populate = Product.associations
+      .filter(ast => ast.autoPopulate !== false)
+      .map(ast => ast.alias)
+      .join(' ');
 
-    const result = Product.aggregate(aggregateStages)
+    return Product
+      .find()
+      .where(filters.where)
+      .sort(filters.sort)
       .skip(filters.start)
-      .limit(filters.limit);
-
-    if (_.has(filters, 'start')) result.skip(filters.start);
-    if (_.has(filters, 'limit')) result.limit(filters.limit);
-    if (!_.isEmpty(filters.sort)) result.sort(filters.sort);
-
-    return result;
+      .limit(filters.limit)
+      .populate(populate);
   },
 
   /**

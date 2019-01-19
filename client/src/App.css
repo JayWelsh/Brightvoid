@@ -120,6 +120,7 @@ font-size: 100px;
 html, body {
   min-height: 100vh !important;
   background-image: url('./img/ep_naturalblack.png');
+  background-color: #121720;
 }
 
 .overflow-x-scroll {
