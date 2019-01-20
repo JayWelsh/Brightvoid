@@ -11,6 +11,8 @@ import Card from '@material-ui/core/Card';
 import Tilt from 'react-tilt';
 import SimpleMediaCard from './SimpleMediaCard';
 import {groupImageCollectionByProductID} from '../utils';
+import AdaptiveHeader from './AdaptiveHeader';
+import store from '../state';
 
 function TabContainer({ children, dir }) {
   return (
@@ -39,6 +41,7 @@ class ArtworkPage extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      isConsideredMobile: store.getState().isConsideredMobile,
       initialRender: true
     }
   }
@@ -52,7 +55,7 @@ class ArtworkPage extends React.Component {
 
   render() {
     const { classes, artworkNameSEO } = this.props;
-    const {initialRender} = this.state;
+    const {initialRender, isConsideredMobile} = this.state;
     let pagePaddingStyle = { paddingTop: '15px' };
     let disableMouseInteractions = " disable-mouse-events";
     if(!initialRender) {
@@ -103,6 +106,7 @@ class ArtworkPage extends React.Component {
               let artwork = data.artworks[0];
               let imageCollections = artwork.imagecollections;
               let productIDToImages = groupImageCollectionByProductID(imageCollections);
+              let artworkTiltOptions = { max: 10, speed: 2000  };
               console.log('productIDToImages', productIDToImages);
               console.log('artwork.images[0]',artwork.images[0].url);
               return (
@@ -116,15 +120,25 @@ class ArtworkPage extends React.Component {
                     <Grid item xs={12} sm={12} md={12} lg={12}>
                       <Grid container>
                         <Grid item xs={12} sm={12} md={12} lg={12}>
-                          <div style={{padding: '50px'}}>
-                            <Tilt className={"Tilt" + disableMouseInteractions} options={{ max: 10, speed: 2000  }} style={{ height: 500, width: '100%', background: `url(${artwork.images[0].url}) no-repeat center` }} >
+                          {!isConsideredMobile && <div style={{ paddingTop: '50px', paddingBottom: '50px' }}>
+                            <Tilt className={"Tilt" + disableMouseInteractions} options={artworkTiltOptions} style={{ height: 400, width: '100%', background: `url(${artwork.images[0].url}) no-repeat center` }} >
                               <div className="Tilt-inner">
-                                <Typography style={{ textAlign: 'center' }} className="Tilt-inner rock-salt heavy-text-shadow float-effect" gutterBottom variant={"h2"} component="h1">
+                                <AdaptiveHeader headerClass="Tilt-inner rock-salt heavy-text-shadow text-center float-effect" variant="h4" component="h1">
                                   {artwork.name}
-                                </Typography>
+                                </AdaptiveHeader>
                               </div>
                             </Tilt>
-                          </div>
+                          </div>}
+                            {isConsideredMobile &&
+                              <div>
+                                <img style={{ width: '100%', height: 'auto' }} src={artwork.images[0].url} />
+                                <div style={{position: 'absolute', left: '0px', top: '50%', transform: 'translateY(-50%)'}}>
+                                <AdaptiveHeader headerClass="Tilt-inner rock-salt heavy-text-shadow text-center float-effect" variant="h4" component="h1">
+                                  {artwork.name}
+                                </AdaptiveHeader>
+                                </div>
+                              </div>
+                            }
                         </Grid>
                         <Grid item xs={12} sm={12} md={12} lg={12}>
                           <div className={classes.descriptionArea}>
@@ -137,8 +151,8 @@ class ArtworkPage extends React.Component {
                           </div>
                         </Grid>
                         <Grid container>
-                          {artwork.products.map(item =>
-                            <Grid key={item} item xs={12} sm={6} md={6} lg={4}>
+                          {artwork.products.map((item, index) =>
+                            <Grid key={item} style={{paddingBottom: (index === (artwork.products.length - 1)) ? '15px' : '15px'}} item xs={12} sm={6} md={6} lg={4}>
                               <SimpleMediaCard headline={item.name} description={item.description} image={productIDToImages[item._id] ? productIDToImages[item._id][0].url : ''} link={'./' + item.seo + '/'} />
                             </Grid>
                           )}

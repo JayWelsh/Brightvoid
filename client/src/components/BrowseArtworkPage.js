@@ -6,6 +6,7 @@ import SimpleMediaCard from '../components/SimpleMediaCard';
 import Grid from '@material-ui/core/Grid';
 import gql from "graphql-tag";
 import { Query, withApollo } from "react-apollo";
+import AdaptiveHeader from "./AdaptiveHeader";
 
 const tiltOptionsCard = { max: 3, scale: 1.015, reverse: true };
 
@@ -41,9 +42,9 @@ class BrowseArtworkPage extends React.Component {
           <Grid container xs={12} sm={12} md={8} lg={8}>
             {!hideHeading &&
               <Grid item xs={12} sm={12} md={12} lg={12}>
-                <Typography style={{ textAlign: 'center' }} className="Tilt-inner rock-salt heavy-text-shadow" gutterBottom variant={"h2"} component="h1">
+                <AdaptiveHeader headerClass="Tilt-inner rock-salt heavy-text-shadow text-center" variant="h4" component="h1">
                   Artwork
-                </Typography>
+                </AdaptiveHeader>
               </Grid>
             }
             <Query

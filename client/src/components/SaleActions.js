@@ -17,6 +17,7 @@ import { connect } from 'react-redux'
 import { showCartOverlay, addToCart, removeFromCart } from '../state/actions';
 import AddCircleOutlineIcon from '@material-ui/icons/Add';
 import RemoveCircleOutlineIcon from '@material-ui/icons/Remove';
+import store from '../state';
 
 import { Query, withApollo } from "react-apollo";
 
@@ -57,7 +58,8 @@ class SaleActions extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      labelWidth: 0
+      labelWidth: 0,
+      isConsideredMobile: store.getState().isConsideredMobile,
     }
   }
     
@@ -188,7 +190,7 @@ class SaleActions extends React.Component {
         <Typography className="heavy-text-shadow no-margin" gutterBottom variant={"h4"}>
           ${price}
         </Typography>
-        <div className={'flex-align'}>
+        <div>
           {builtOptions && Object.keys(builtOptions).map((item) => {
             let optionType = builtOptions[item].type;
             if (optionType === 'list') {
