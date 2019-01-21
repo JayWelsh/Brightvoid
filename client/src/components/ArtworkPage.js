@@ -132,7 +132,7 @@ class ArtworkPage extends React.Component {
                             {isConsideredMobile &&
                               <div>
                                 <img style={{ width: '100%', height: 'auto' }} src={artwork.images[0].url} />
-                                <div style={{position: 'absolute', left: '0px', top: '50%', transform: 'translateY(-50%)'}}>
+                                <div style={{position: 'absolute', left: '50%', top: '50%', transform: 'translateY(-50%)translateX(-50%)'}}>
                                 <AdaptiveHeader headerClass="Tilt-inner rock-salt heavy-text-shadow text-center float-effect" variant="h4" component="h1">
                                   {artwork.name}
                                 </AdaptiveHeader>
