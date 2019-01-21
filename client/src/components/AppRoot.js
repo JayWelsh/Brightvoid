@@ -186,7 +186,7 @@ class AppRoot extends React.Component {
               <main className={classes.content}>
                 <PageContainer isConsideredMobile={isConsideredMobile} />
               </main>
-              <Footer/>
+              {/* <Footer/> */}
           </div>
         </MuiThemeProvider>
       </ApolloProvider>

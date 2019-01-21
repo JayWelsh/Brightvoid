@@ -27,7 +27,7 @@ class Footer extends React.Component {
                         <Grid container>
                             <Grid className='flex-center' item xs={12} sm={12} md={4} lg={4}>
                                 <Typography className="Tilt-inner heavy-text-shadow uppercase" gutterBottom variant={"h5"}>
-                                    Products
+                                    Artwork
                                 </Typography>
                             </Grid>
                             <Grid className='flex-center' item xs={12} sm={12} md={4} lg={4}>
